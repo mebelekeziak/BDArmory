@@ -2180,8 +2180,9 @@ FIXES
 - Fix various NREs.
 IMPROVEMENTS
 - General:
-	- Add Waterfall config for the Saturn engine.
-	- Increase the HP of the combat seat to the same as a kerbal (500).
+        - Add Waterfall config for the Saturn engine.
+        - Add Waterfall config for the AIM-120 missile.
+        - Increase the HP of the combat seat to the same as a kerbal (500).
 	- Add a time scaling option to the GamePlay section of the settings for speeding up/slowing down the game rate while competitions are active.
 		- This does not affect the physics time-step, which remains at 0.02, but simply tries to make the in-game clock go faster with respect to a wall clock, so it should not affect the physics (if they're implemented correctly).
 		- WARNING: This is likely to mess with any other mod that adjusts the time rate, e.g., TimeControl, if they're active at the same time.

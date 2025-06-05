@@ -479,6 +479,7 @@ namespace BDArmory.Weapons.Missiles
             set
             {
                 _throttle = Mathf.Clamp01(value);
+                waterfallThrottle = _throttle;
             }
         }
 
@@ -544,6 +545,9 @@ namespace BDArmory.Weapons.Missiles
         public StringBuilder debugString = new StringBuilder();
 
         private float _throttle = 1f;
+
+        [KSPField(isPersistant = false)]
+        public float waterfallThrottle = 1f; // Exposed throttle value for Waterfall
 
         public string Sublabel;
         public int missilecount = 0; //#191

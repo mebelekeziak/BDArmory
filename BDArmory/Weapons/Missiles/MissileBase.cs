@@ -585,6 +585,12 @@ namespace BDArmory.Weapons.Missiles
                     setControllerValueMethod.Invoke(wf, new object[] { "waterfallThrottle", waterfallThrottle });
                 }
                 catch { }
+                try
+                {
+                    // Also try updating a controller named "throttle" for backwards compatibility
+                    setControllerValueMethod.Invoke(wf, new object[] { "throttle", waterfallThrottle });
+                }
+                catch { }
             }
         }
 

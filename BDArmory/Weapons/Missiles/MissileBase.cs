@@ -479,6 +479,9 @@ namespace BDArmory.Weapons.Missiles
             set
             {
                 _throttle = Mathf.Clamp01(value);
+                waterfallThrottle = _throttle;
+                if (Fields != null && Fields["waterfallThrottle"] != null) 
+                    Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
             }
         }
 
@@ -545,6 +548,9 @@ namespace BDArmory.Weapons.Missiles
 
         private float _throttle = 1f;
 
+        [KSPField(isPersistant = false)]
+        public float waterfallThrottle = 1f; // Exposed throttle value for Waterfall
+
         public string Sublabel;
         public int missilecount = 0; //#191
         RaycastHit[] proximityHits = new RaycastHit[100];
@@ -588,6 +594,18 @@ namespace BDArmory.Weapons.Missiles
                 hasAmmo = false;
                 isMMG = true;
             }
+            // Ensure the Waterfall throttle field is initialised
+            waterfallThrottle = Throttle;
+            if (Fields != null && Fields["waterfallThrottle"] != null)
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            waterfallThrottle = Throttle;
+            if (Fields != null && Fields["waterfallThrottle"] != null)
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
         }
 
         public void GetMissileCount() // could stick this in GetSublabel, but that gets called every frame by BDArmorySetup?

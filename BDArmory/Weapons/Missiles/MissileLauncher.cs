@@ -428,6 +428,11 @@ namespace BDArmory.Weapons.Missiles
         {
             //base.OnStart(state);
 
+            // Initialize the Waterfall throttle field
+            waterfallThrottle = Throttle;
+            if (Fields != null && Fields["waterfallThrottle"] != null)
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
+
             if (useFuel)
             {
                 float initialMass = part.mass;
@@ -1663,6 +1668,11 @@ namespace BDArmory.Weapons.Missiles
         public override void OnFixedUpdate()
         {
             base.OnFixedUpdate();
+
+            // Keep the public throttle field updated for Waterfall effects
+            waterfallThrottle = Throttle;
+            if (Fields != null && Fields["waterfallThrottle"] != null)
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
 
             if (!HighLogic.LoadedSceneIsFlight) return;
 

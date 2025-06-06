@@ -15,6 +15,7 @@ using BDArmory.Settings;
 using BDArmory.Targeting;
 using BDArmory.UI;
 using BDArmory.Utils;
+using System.Reflection;
 
 namespace BDArmory.Weapons.Missiles
 {
@@ -481,6 +482,7 @@ namespace BDArmory.Weapons.Missiles
                 _throttle = Mathf.Clamp01(value);
                 waterfallThrottle = _throttle;
                 // Update the PartModule field so Waterfall can read it
+                PushWaterfallThrottle();
                 if (Fields != null && Fields["waterfallThrottle"] != null) 
                     Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
             }
@@ -552,6 +554,40 @@ namespace BDArmory.Weapons.Missiles
         [KSPField(isPersistant = false)]
         public float waterfallThrottle = 1f; // Exposed throttle value for Waterfall
 
+        // Reflection references to Waterfall for pushing controller values
+        List<PartModule> waterfallModules;
+        MethodInfo setControllerValueMethod;
+
+        protected void InitWaterfall()
+        {
+            if (waterfallModules != null) return;
+            waterfallModules = part.Modules.GetModules<PartModule>()
+                .Where(m => m.moduleName == "ModuleWaterfallFX" || m.GetType().Name == "ModuleWaterfallFX")
+                .ToList();
+            if (waterfallModules.Count > 0)
+            {
+                setControllerValueMethod = waterfallModules[0].GetType().GetMethod("SetControllerValue", new[] { typeof(string), typeof(float) });
+            }
+        }
+
+        protected void PushWaterfallThrottle()
+        {
+            if (waterfallModules == null || setControllerValueMethod == null)
+            {
+                InitWaterfall();
+                if (waterfallModules == null || setControllerValueMethod == null)
+                    return;
+            }
+            foreach (var wf in waterfallModules)
+            {
+                try
+                {
+                    setControllerValueMethod.Invoke(wf, new object[] { "waterfallThrottle", waterfallThrottle });
+                }
+                catch { }
+            }
+        }
+
         public string Sublabel;
         public int missilecount = 0; //#191
         RaycastHit[] proximityHits = new RaycastHit[100];
@@ -599,6 +635,8 @@ namespace BDArmory.Weapons.Missiles
             waterfallThrottle = Throttle;
             if (Fields != null && Fields["waterfallThrottle"] != null)
                 Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
+            InitWaterfall();
+            PushWaterfallThrottle();
         }
 
         public override void OnUpdate()
@@ -607,6 +645,7 @@ namespace BDArmory.Weapons.Missiles
             waterfallThrottle = Throttle;
             if (Fields != null && Fields["waterfallThrottle"] != null)
                 Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
+            PushWaterfallThrottle();
         }
 
         public void GetMissileCount() // could stick this in GetSublabel, but that gets called every frame by BDArmorySetup?

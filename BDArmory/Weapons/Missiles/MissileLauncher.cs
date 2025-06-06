@@ -1664,6 +1664,9 @@ namespace BDArmory.Weapons.Missiles
         {
             base.OnFixedUpdate();
 
+            // Keep the public throttle field updated for Waterfall effects
+            waterfallThrottle = Throttle;
+
             if (!HighLogic.LoadedSceneIsFlight) return;
 
             FloatingOriginCorrection();

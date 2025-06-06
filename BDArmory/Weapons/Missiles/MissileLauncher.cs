@@ -428,6 +428,9 @@ namespace BDArmory.Weapons.Missiles
         {
             //base.OnStart(state);
 
+            // Initialize the Waterfall throttle field
+            waterfallThrottle = Throttle;
+
             if (useFuel)
             {
                 float initialMass = part.mass;

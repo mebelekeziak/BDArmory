@@ -430,6 +430,8 @@ namespace BDArmory.Weapons.Missiles
 
             // Initialize the Waterfall throttle field
             waterfallThrottle = Throttle;
+            if (Fields.Contains("waterfallThrottle"))
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
 
             if (useFuel)
             {
@@ -1669,6 +1671,8 @@ namespace BDArmory.Weapons.Missiles
 
             // Keep the public throttle field updated for Waterfall effects
             waterfallThrottle = Throttle;
+            if (Fields.Contains("waterfallThrottle"))
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
 
             if (!HighLogic.LoadedSceneIsFlight) return;
 

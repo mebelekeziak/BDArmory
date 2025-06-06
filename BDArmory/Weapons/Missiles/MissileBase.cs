@@ -595,6 +595,18 @@ namespace BDArmory.Weapons.Missiles
                 hasAmmo = false;
                 isMMG = true;
             }
+            // Ensure the Waterfall throttle field is initialised
+            waterfallThrottle = Throttle;
+            if (Fields != null && Fields["waterfallThrottle"] != null)
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            waterfallThrottle = Throttle;
+            if (Fields != null && Fields["waterfallThrottle"] != null)
+                Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
         }
 
         public void GetMissileCount() // could stick this in GetSublabel, but that gets called every frame by BDArmorySetup?

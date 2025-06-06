@@ -481,7 +481,7 @@ namespace BDArmory.Weapons.Missiles
                 _throttle = Mathf.Clamp01(value);
                 waterfallThrottle = _throttle;
                 // Update the PartModule field so Waterfall can read it
-                if (Fields != null && Fields["waterfallThrottle"] != null)
+                if (Fields != null && Fields["waterfallThrottle"] != null) 
                     Fields["waterfallThrottle"].SetValue(waterfallThrottle, this);
             }
         }
